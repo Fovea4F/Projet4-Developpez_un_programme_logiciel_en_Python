@@ -1,0 +1,4 @@
+*.txt
+.$diagramme_programme.drawio.bkp
+modulesbr/test_mvc_20230731/module/chess_tournament_play_controller.py
+modules/__pycache__
