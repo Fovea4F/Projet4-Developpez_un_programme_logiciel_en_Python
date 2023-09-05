@@ -12,6 +12,7 @@ from model.chess_tournament import Tournament
 
 def get_random_id(length):
     """create an alphanumeric random length alpha_lowercase word"""
+    # A retirer
 
     random_id = ''.join(random.choice(string.ascii_lowercase) for _ in range(length))
     return random_id
@@ -160,6 +161,7 @@ def round_score_update(_current_tournament):
 def conform_id(_id):
     """ Verify if passed id respect pattern"""
     # Pattern 2 Capital letters followed by 5 digits
+    # A retirer
 
     pattern = r'^[A-Z]{2}[0-9]{5}$'
     valid_id = False
@@ -219,7 +221,7 @@ def read_from_json(file=''):
 def write_to_json(object='', file=''):
     """ Write serialized object to JSON file
         Return instances list from json formatted file"""
-
+    # A retirer
     class Container:
         """Generic Class"""
 
@@ -260,7 +262,7 @@ def update_json_with_player(player='', file=''):
             load_player.name = _[1]['name']
             load_player.firstname = _[1]['firstname']
             load_player.birthday = _[1]['birthday']
-            if _[1]['total_score']:
+            if hasattr(_[1], 'total_score'):
                 load_player.total_score = _[1]['total_score']
             player_list.append(load_player)
         if player != '':

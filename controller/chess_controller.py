@@ -4,16 +4,14 @@ import os
 import sys
 from controller.controller_tools import round_score_update
 from controller.controller_tools import round_and_match_create
-# from controller.controller_tools import read_from_json
 from controller.controller_tools import read_from_json
 from controller.controller_tools import find_player_from_json
 from controller.controller_tools import update_json_with_player
 from controller.controller_tools import save_data_to_json_file
-# from controller.controller_tools import serialize_tournament
 from controller.controller_tools import serialize_tournament_list
 from controller.controller_tools import deserialize_tournament
 from controller.controller_tools import update_json_tournament_list
-# from controller.controller_tools import get_random_id
+
 from model.chess_player import Player
 from model.chess_tournament import Tournament
 from model.chess_match import Match
@@ -60,12 +58,12 @@ class Controller:
 
         message = _message
         choice = 'a'
-        while choice not in ('1', '2', '3', '4', 'X', 'x', 'O', 'o', 'N', 'n'):
+        while choice not in ('1', '2', '3', '4', 'X', 'x', 'Q', 'q', 'O', 'o', 'N', 'n'):
             choice = self.view.show_main_menu(
                 _tournament=self.tournament, _message=message)
         match choice:
             case "1":
-                self.manage_menu_1()
+                self.manage_tournament_menu_1()
             case "2":
                 if self.tournament.name == '':
                     message = " Vous devez sélectionner un Tournoi "
@@ -74,13 +72,13 @@ class Controller:
                     message = " Le tournoi est en cours, vous ne pouvez pas modifier ce tournoi"
                     self.manage_main_menu(_message=message)
                 else:
-                    self.manage_menu_2()
+                    self.manage_player_menu_2()
             case "3":
-                self.manage_menu_3()
+                self.manage_tournament_run_menu_3()
             case "4":
-                self.manage_menu_4()
+                self.manage_report_menu_4()
                 # Reports
-            case 'x':
+            case ('q' | 'Q'):
                 message = " Vous souhaitez quitter le programme ? O/n "
                 choice = self.view.show_main_menu(
                     _tournament=self.tournament, _message=message)
@@ -94,7 +92,7 @@ class Controller:
             case _:
                 self.manage_main_menu()
 
-    def manage_menu_1(self):
+    def manage_tournament_menu_1(self):
         """manage_menu1 management"""
         # ===  1. : Sélection / Création d'un tournoi     ===
 
@@ -110,14 +108,14 @@ class Controller:
             match choice:
                 case "1":
                     # ===  1.1 : Sélection d'un tournoi   ===
-                    self.manage_menu_1_1()
+                    self.manage_tournament_selection_menu_1_1()
                 case "2":
                     # ===  1.2 : Création d'un tournoi    ===
-                    self.manage_menu_1_2()
+                    self.manage_tournament_registration_menu_1_2()
                 case "x":
                     self.manage_main_menu()
 
-    def manage_menu_1_1(self):
+    def manage_tournament_selection_menu_1_1(self):
         """manage_menu 1.1 management"""
         # Select Tournament in Registered Tournament List
 
@@ -134,7 +132,7 @@ class Controller:
                     _tournament=self.tournament, _tournament_list=self.tournament_list)
                 match choice:
                     case 'x':
-                        self.manage_menu_1()
+                        self.manage_tournament_menu_1()
                     case _:
                         if (int(choice) > 0) & (int(choice) <= list_length):
                             # tournament_current_file_name = f"{file_id}_tournament.json"
@@ -154,10 +152,10 @@ class Controller:
                             # update_json_tournament_list(_tournament=self.tournament, _file=tournament_main_list_file)
                         else:
                             choice = False
-                            self.manage_menu_1_1()
+                            self.manage_tournament_selection_menu_1_1()
             self.manage_main_menu()
 
-    def manage_menu_1_2(self):
+    def manage_tournament_registration_menu_1_2(self):
         """manage_menu 1.2 management"""
         # Register a new tournament in tournament list
 
@@ -173,7 +171,7 @@ class Controller:
                 _message='name', _tournament_form=tournament_form)
             # name = input(" Nom du tournoi : ")
             if name in ('x', 'X'):
-                self.manage_menu_1()
+                self.manage_tournament_menu_1()
             else:
                 tournament_form["name"] = name
 
@@ -181,7 +179,7 @@ class Controller:
                 _message='location', _tournament_form=tournament_form)
             # name = input(" Nom du tournoi : ")
             if location in ('x', 'X'):
-                self.manage_menu_1()
+                self.manage_tournament_menu_1()
             else:
                 tournament_form["location"] = location
 
@@ -189,28 +187,28 @@ class Controller:
                 _message='description', _tournament_form=tournament_form)
             # name = input(" Nom du tournoi : ")
             if description in ('x', 'X'):
-                self.manage_menu_1()
+                self.manage_tournament_menu_1()
             else:
                 tournament_form["description"] = description
 
             begin_date = self.view.show_menu_1_2(
                 _message='begin_date', _tournament_form=tournament_form)
             if begin_date == 'x':
-                self.manage_menu_1()
+                self.manage_tournament_menu_1()
             else:
                 tournament_form["begin_date"] = begin_date
 
             end_date = self.view.show_menu_1_2(
                 _message='end_date', _tournament_form=tournament_form)
             if end_date == 'x':
-                self.manage_menu_1()
+                self.manage_tournament_menu_1()
             else:
                 tournament_form["end_date"] = end_date
 
             round_number = self.view.show_menu_1_2(
                 _message='round_number', _tournament_form=tournament_form)
             if round_number == 'x':
-                self.manage_menu_1()
+                self.manage_tournament_menu_1()
             elif round_number == '':
                 round_number = 4
             tournament_form["round_number"] = round_number
@@ -219,7 +217,7 @@ class Controller:
                 _message='validation', _tournament_form=tournament_form)
             match choice:
                 case 'n':
-                    self.manage_menu_1_2()
+                    self.manage_tournament_registration_menu_1_2()
                 case 'o':
                     tournament = Tournament()
                     tournament.name = name
@@ -239,9 +237,9 @@ class Controller:
                         object=self.tournament_list)
                     save_data_to_json_file(
                         objet=data_to_save, file=tournament_main_list_file)
-            self.manage_menu_1()
+            self.manage_tournament_menu_1()
 
-    def manage_menu_2(self):
+    def manage_player_menu_2(self):
         """manage_menu 2 management"""
         # Players management
 
@@ -266,13 +264,13 @@ class Controller:
         match choice:
             case "1":
                 # select players by name
-                self.manage_menu_2_1()
+                self.manage_player_selection_menu_2_1()
             case "2":
                 # select players by firstname
-                self.manage_menu_2_2()
+                self.manage_player_register_menu_2_2()
             case "3":
                 # view players list
-                self.manage_menu_2_3()
+                self.manage_player_list_menu_2_3()
             case "X" | "x":
                 update_json_tournament_list(
                     _tournament=self.tournament, _file=tournament_main_list_file)
@@ -280,11 +278,11 @@ class Controller:
             case _:
                 self.manage_main_menu()
 
-    def manage_menu_2_1(self, _message=''):
+    def manage_player_selection_menu_2_1(self, _message=''):
         """manage_menu 2.1 management"""
         # Selection d'un joueur parmi la liste des joueurs
 
-        # load players from mail players file
+        # load players from main players file
         main_player_list = read_from_json(player_main_list_file)
         self.main_player_list = sorted(main_player_list, key=lambda player: (player.name,
                                                                              player.firstname,
@@ -295,7 +293,7 @@ class Controller:
             # menu 2_1_0
             choice = self.view.show_menu_2_1(_tournament=self.tournament)
             if choice == 'x':
-                self.manage_menu_2()
+                self.manage_player_menu_2()
         else:
             # menu 2_1_1
             choice = self.view.show_menu_2_1_1(
@@ -303,21 +301,21 @@ class Controller:
             match choice:
                 case '1':
                     # construction de la liste de nom en rapport avec la saisie de nom
-                    selected_list = self.manage_menu_2_1_1_1()
+                    selected_list = self.manage_player_name_selection_menu_2_1_1_1()
                 case '2':
                     # construction de la liste de nom en rapport avec la saisie de prénom
-                    selected_list = self.manage_menu_2_1_1_2()
+                    selected_list = self.manage_player_firstname_selection_menu_2_1_1_2()
                 case "X" | "x":
-                    self.manage_menu_2()
+                    self.manage_player_menu_2()
                 case _:
-                    self.manage_menu_2()
+                    self.manage_player_menu_2()
 
             choice = 'a'
             while len(selected_list) > 0:
                 choice = self.view.show_menu_2_1_2(_tournament=self.tournament,
                                                    _selected_player_list=selected_list)
                 if choice == 'x':
-                    self.manage_menu_2_1()
+                    self.manage_player_selection_menu_2_1()
                 else:
                     choice = int(choice)-1
                     player = selected_list[choice]
@@ -327,16 +325,18 @@ class Controller:
                         self.tournament.player_list.append(player)
                         selected_list.pop(choice)
                     choice = 'a'
+        if self.tournament.status == "registered":
+            self.tournament.status = "selected"
         update_json_tournament_list(
             _tournament=self.tournament, _file=tournament_main_list_file)
-        self.manage_menu_2_1()
+        self.manage_player_selection_menu_2_1()
 
-    def manage_menu_2_1_1_1(self):
+    def manage_player_name_selection_menu_2_1_1_1(self):
         """Get player_list with player name filter"""
 
         name = self.view.show_menu_2_1_1_1(_tournament=self.tournament)
         if name in ('x', 'X'):
-            self.manage_menu_2_1()
+            self.manage_player_selection_menu_2_1()
         select_list = []
         select_list = find_player_from_json(
             file=player_main_list_file, key='name', value=name)
@@ -345,12 +345,12 @@ class Controller:
                                                                 player.birthday))
         return selected_list
 
-    def manage_menu_2_1_1_2(self):
+    def manage_player_firstname_selection_menu_2_1_1_2(self):
         """Get player_list with player firstname filter"""
 
         firstname = self.view.show_menu_2_1_1_2(_tournament=self.tournament)
         if firstname in ('x', 'X'):
-            self.manage_menu_2_1()
+            self.manage_player_selection_menu_2_1()
         select_list = []
         select_list = find_player_from_json(
             file=player_main_list_file, key='firstname', value=firstname)
@@ -359,7 +359,7 @@ class Controller:
                                                                 player.birthday))
         return selected_list
 
-    def manage_menu_2_2(self, _message='', _player_form=''):
+    def manage_player_register_menu_2_2(self, _message='', _player_form=''):
         """manage_menu 2.2 management"""
         # Register new player in global players list
 
@@ -378,24 +378,22 @@ class Controller:
                                                 _player_form=player_form)
             match player_id:
                 case 'X' | 'x':
-                    self.manage_menu_2()
+                    self.manage_player_menu_2()
                 case False:
                     player_form["player_id"] = "Le format de l'ID n'est pas respecté"
-                    self.manage_menu_2_2(_message='player_id',
-                                         _player_form=player_form)
+                    self.manage_player_register_menu_2_2(_message='player_id', _player_form=player_form)
                 case _:
                     for _ in enumerate(self.main_player_list):
                         if _[1].player_id == player_id:
                             player_form["player_id"] = "Cet identifiant est déjà connu"
-                            self.manage_menu_2_2(_message='player_id',
-                                                 _player_form=player_form)
+                            self.manage_player_register_menu_2_2(_message='player_id', _player_form=player_form)
                     player_form["player_id"] = player_id
 
             name = self.view.show_menu_2_2(_tournament=self.tournament,
                                            _message="name",
                                            _player_form=player_form)
             if name in ('x', 'X'):
-                self.manage_menu_2()
+                self.manage_player_menu_2()
             else:
                 player_form['name'] = name
 
@@ -403,7 +401,7 @@ class Controller:
                                                 _message="firstname",
                                                 _player_form=player_form)
             if firstname in ('x', 'X'):
-                self.manage_menu_2()
+                self.manage_player_menu_2()
             else:
                 player_form['firstname'] = firstname
 
@@ -411,7 +409,7 @@ class Controller:
                                                _message="birthday",
                                                _player_form=player_form)
             if birthday in ('x', 'X'):
-                self.manage_menu_2()
+                self.manage_player_menu_2()
             else:
                 player_form['birthday'] = birthday
 
@@ -419,14 +417,13 @@ class Controller:
                                                     _message='validate_data',
                                                     _player_form=player_form)
             if validate_data in ('N', 'n'):
-                self.manage_menu_2_2()
+                self.manage_player_register_menu_2_2()
             else:
                 _player.player_id = player_id
                 _player.name = name
                 _player.firstname = firstname
                 _player.birthday = birthday
-                update_json_with_player(
-                    player=_player, file=player_main_list_file)
+                update_json_with_player(player=_player, file=player_main_list_file)
 
             choice = 'a'
             choice = self.view.show_menu_2_2(_tournament=self.tournament,
@@ -434,11 +431,11 @@ class Controller:
                                              _player_form=player_form)
             match choice:
                 case 'n':
-                    self.manage_menu_2()
+                    self.manage_player_menu_2()
                 case 'o':
-                    self.manage_menu_2_2()
+                    self.manage_player_register_menu_2_2()
 
-    def manage_menu_2_3(self):
+    def manage_player_list_menu_2_3(self):
         """ Sub menu 2.3 """
         # Show registered tournament list?  (O/n)
 
@@ -446,9 +443,9 @@ class Controller:
         if len(self.tournament.player_list) == 0:
             _message = "player_list vide"
         self.view.show_menu_2_3(self.tournament.player_list, _message=_message)
-        self.manage_menu_2()
+        self.manage_player_menu_2()
 
-    def manage_menu_3(self):
+    def manage_tournament_run_menu_3(self):
         """ Sub menu 3 """
         # Tournament Management Menu
 
@@ -474,7 +471,7 @@ class Controller:
                         _tournament=self.tournament, _message=message)
                 match choice:
                     case '3':
-                        self.manage_menu_3_3()
+                        self.manage_round_stats_menu_3_3()
                     case 'x':
                         update_json_tournament_list(
                             _tournament=self.tournament, _file=tournament_main_list_file)
@@ -487,7 +484,7 @@ class Controller:
                     _tournament=self.tournament, _message=message)
             match choice:
                 case '3':
-                    self.manage_menu_3_3()
+                    self.manage_round_stats_menu_3_3()
                 case 'x':
                     self.manage_main_menu()
 
@@ -500,9 +497,9 @@ class Controller:
                 message = ''
             match choice:
                 case '1':
-                    self.manage_menu_3_1()
+                    self.manage_round_run_menu_3_1()
                 case '3':
-                    self.manage_menu_3_3()
+                    self.manage_round_stats_menu_3_3()
                 case 'x':
                     self.manage_main_menu()
         else:
@@ -516,9 +513,9 @@ class Controller:
                     message = ''
                 match choice:
                     case '1':
-                        self.manage_menu_3_1()
+                        self.manage_round_run_menu_3_1()
                     case '3':
-                        self.manage_menu_3_3()
+                        self.manage_round_stats_menu_3_3()
                     case 'x':
                         self.manage_main_menu()
 
@@ -531,15 +528,15 @@ class Controller:
                     message = ''
                 match choice:
                     case '2':
-                        self.manage_menu_3_2()
+                        self.manage_round_closure_menu_3_2()
                         # Round close management
                     case '3':
-                        self.manage_menu_3_3()
+                        self.manage_round_stats_menu_3_3()
                         # Round Display
                     case 'x':
                         self.manage_main_menu()
 
-    def manage_menu_3_1(self):
+    def manage_round_run_menu_3_1(self):
         """Tournament Round play: go..go..go....!"""
 
         choice = 'a'
@@ -584,9 +581,9 @@ class Controller:
                 if choice != 'x':
                     choice = 'x'
 
-        self.manage_menu_3()
+        self.manage_tournament_run_menu_3()
 
-    def manage_menu_3_2(self):
+    def manage_round_closure_menu_3_2(self):
         """Round closure
         Tournament matches scores set"""
 
@@ -597,7 +594,7 @@ class Controller:
 
         choice = 'a'
         if len(self.tournament.round_list) == 0:
-            self.manage_menu_3_1()
+            self.manage_round_run_menu_3_1()
         else:
             if not self.tournament.round_list[-1].ended:
                 message = MESSAGE_1
@@ -606,9 +603,9 @@ class Controller:
                 message = ''
                 match choice:
                     case 'n':
-                        self.manage_menu_3()
+                        self.manage_tournament_run_menu_3()
                     case 'x':
-                        self.manage_menu_3()
+                        self.manage_tournament_run_menu_3()
                     case 'o':
                         _current_round = self.tournament.round_list[-1]
                         if _current_round.ended:
@@ -617,7 +614,7 @@ class Controller:
                                 _tournament=self.tournament, _message=message)
                             message = ''
                             if choice == 'x':
-                                self.manage_menu_3_1()
+                                self.manage_round_run_menu_3_1()
                         else:
                             for game in enumerate(_current_round.match_list, start=1):
                                 player_A_id = game[1].player_a
@@ -645,7 +642,7 @@ class Controller:
                                         # game[1].score_b = 0.0
                                         game[1].score_update(score_a=1.0)
                                     case 'X' | 'x':
-                                        self.manage_menu_3_2()
+                                        self.manage_round_closure_menu_3_2()
                             # Set ended and end_time round flags, report score to player in tournament
                             self.tournament.round_list[-1].close()
                             if self.tournament.round_number == len(self.tournament.round_list):
@@ -661,13 +658,13 @@ class Controller:
                                 choice = self.view.show_menu_3_2(
                                     _tournament=self.tournament, _message=message)
                                 message = ''
-                        self.manage_menu_3_2()
+                        self.manage_round_closure_menu_3_2()
 
         if choice in ('x', 'n'):
             choice = 'a'
-        self.manage_menu_3()
+        self.manage_tournament_run_menu_3()
 
-    def manage_menu_3_3(self):
+    def manage_round_stats_menu_3_3(self):
         """Display Rounds stats"""
 
         choice = 'a'
@@ -680,13 +677,12 @@ class Controller:
 
         match choice:
             case 'x':
-                self.manage_menu_3()
+                self.manage_tournament_run_menu_3()
             case _:
-                self.manage_menu_3()
+                self.manage_tournament_run_menu_3()
 
-    def manage_menu_4(self):
-        """ Report menu  """
-        # Reports main Menu
+    def manage_report_menu_4(self):
+        """ Report main menu  """
 
         choice = 'a'
         if self.tournament.name == '':
@@ -699,40 +695,40 @@ class Controller:
                 if len(self.tournament.player_list) == 0:
                     self.manage_main_menu()
                 else:
-                    self.manage_menu_4_1()
+                    self.manage_report_menu_4_1()
             case '2':
                 if self.tournament == '':
                     self.manage_main_menu()
                 else:
-                    self.manage_menu_4_2()
+                    self.manage_player_list_report_menu_4_2()
             case '3':
                 if self.tournament.player_list == 0:
                     self.manage_main_menu()
                 else:
-                    self.manage_menu_4_3()
+                    self.manage_score_report_menu_4_3()
             case _:
                 self.manage_main_menu()
 
-    def manage_menu_4_1(self):
-        """ Sub menu 4_1 """
-        # Show registered tournament list
+    def manage_report_menu_4_1(self):
+        """ manage general tournament information menu """
+
         choice = False
         while not choice:
             choice = self.view.show_menu_4_1(_tournament=self.tournament)
-        self.manage_menu_4()
+        self.manage_report_menu_4()
 
-    def manage_menu_4_2(self):
-        """ Sub menu 23 """
-        # Show registered tournament list
+    def manage_player_list_report_menu_4_2(self):
+        """ manage tournament player and round list menu """
+
         choice = False
         while not choice:
             choice = self.view.show_menu_4_2(_tournament=self.tournament)
-        self.manage_menu_4()
+        self.manage_report_menu_4()
 
-    def manage_menu_4_3(self):
-        """ Show Tournament Scores"""
-        # Show registered tournament list
+    def manage_score_report_menu_4_3(self):
+        """ manage score ranking menu"""
+
         choice = False
         while not choice:
             choice = self.view.show_menu_4_3(_tournament=self.tournament)
-        self.manage_menu_4()
+        self.manage_report_menu_4()

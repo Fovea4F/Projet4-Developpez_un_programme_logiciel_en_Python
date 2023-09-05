@@ -1,5 +1,18 @@
 [
     {
+        "name": "Interpolis International Tournament",
+        "location": "Tilburg Netherlands",
+        "begin_date": "24/10/2025",
+        "end_date": "05/11/2025",
+        "description": "Credit Suisse Chess Masters",
+        "current_round_number": 0,
+        "round_number": 1,
+        "status": "registered",
+        "match_couple": [],
+        "round_list": [],
+        "player_list": []
+    },
+	{
         "name": "Montréal Chess Games",
         "location": "Pavillon d’Éducation Communautaire",
         "begin_date": "07/05/2024",
@@ -20,19 +33,6 @@
         "description": "US Masters 2024",
         "current_round_number": 0,
         "round_number": 7,
-        "status": "registered",
-        "match_couple": [],
-        "round_list": [],
-        "player_list": []
-    },
-    {
-        "name": "Interpolis International Tournament",
-        "location": "Tilburg Netherlands",
-        "begin_date": "24/10/2025",
-        "end_date": "05/11/2025",
-        "description": "Credit Suisse Chess Masters",
-        "current_round_number": 0,
-        "round_number": 1,
         "status": "registered",
         "match_couple": [],
         "round_list": [],

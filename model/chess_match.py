@@ -57,15 +57,15 @@ class Match():
         """direct access to score_b element in the tuple Match"""
         self._score_b = score_b
 
-    def display(self):
-        """display a match content
+    def tuple_display(self):
+        """display a match player composition tuple content
         IN : ()
         """
         print(f"{self._player_a:<5} contre {self._player_b:<5}\
               {self._score_a:<5} / {self._score_b:<5}")
 
     def display_players(self):
-        """display a   match content
+        """display players Match content
         IN : ()
         """
         print(f"{self._player_a:<5} contre {self._player_b:<5}")

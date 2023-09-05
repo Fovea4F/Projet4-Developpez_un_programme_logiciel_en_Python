@@ -35,7 +35,7 @@ class View:
         print("="*80)
         print("===  4.   Rapports                                                           ===")
         print("="*80)
-        print("===  x.   Quitter l'application                                              ===")
+        print("===  Q.   Quitter l'application                                              ===")
         print("="*80)
         print()
         if _message != '':
@@ -54,12 +54,12 @@ class View:
                 return choice
             case "Aucun tournoi sélectionné, faites votre choix !":
                 print()
-                while choice not in ('1', '3', '4', 'x'):
+                while choice not in ('1', '3', '4', 'q', 'Q'):
                     user_input(_msg=" Choix : ")
                     choice = input()
                 return choice
             case _:
-                while choice not in ('1', '2', '3', '4', 'x'):
+                while choice not in ('1', '2', '3', '4', 'q', 'Q'):
                     user_input(_msg=" Choix : ")
                     choice = input()
                 return choice
