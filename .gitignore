@@ -1,4 +1,7 @@
-*.txt
-.$diagramme_programme.drawio.bkp
-modulesbr/test_mvc_20230731/module/chess_tournament_play_controller.py
-modules/__pycache__
+.venv
+.vscode/*
+/livrables
+/model/__pycache__
+/view/__pycache__
+/controller/__pycache__
+*.code-workspace
