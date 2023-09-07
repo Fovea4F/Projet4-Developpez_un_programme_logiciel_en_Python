@@ -1,0 +1,5 @@
+.venv
+.vscode/*
+/livrables
+/controller/__pycache__
+*.code-workspace
