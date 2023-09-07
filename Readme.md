@@ -25,6 +25,8 @@ Vous pouvez lire le résultat en ouvrant le fichier flake8-rapport\\**index.html
 
 L'interface utilisateur est constituée d'écrans sur lesquels une ligne intitulée message apporte une aide à l'utilisateur.
 Afin de passer d'un écran à l'autre, il est nécessaire de sélectionner la rubrique en validant le n° à gauche de la ligne correspondante (_ex: je souhaite sélectionner un tournoi ou en inscrire un nouveau ?
+
+***Par exemple***
  -   je sélectionne la rubrique **TOURNOI : Sélection ou Création** en tapant '**1**' suivi de la touche Entrer_)
 Tout le déroulement de ce programme est basé sur ce mode de fonctionnement.
 

@@ -598,8 +598,7 @@ class Controller:
         else:
             if not self.tournament.round_list[-1].ended:
                 message = MESSAGE_1
-                choice = self.view.show_menu_3_2(
-                    _tournament=self.tournament, _message=message)
+                choice = self.view.show_menu_3_2(_tournament=self.tournament, _message=message)
                 message = ''
                 match choice:
                     case 'n':
@@ -630,16 +629,10 @@ class Controller:
                                 match score_A:
                                     # Only player_a score is mentioned, the other player score is calculated
                                     case 'P' | 'p':
-                                        # game[1].score_a = 0.0
-                                        # game[1].score_b = 1.0
                                         game[1].score_update(score_a=0.0)
                                     case 'N' | 'n':
-                                        # game[1].score_a = 0.5
-                                        # game[1].score_b = 0.5
                                         game[1].score_update(score_a=0.5)
                                     case 'G' | 'g':
-                                        # game[1].score_a = 1.0
-                                        # game[1].score_b = 0.0
                                         game[1].score_update(score_a=1.0)
                                     case 'X' | 'x':
                                         self.manage_round_closure_menu_3_2()

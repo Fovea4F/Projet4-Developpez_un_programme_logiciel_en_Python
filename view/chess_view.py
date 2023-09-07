@@ -1062,7 +1062,7 @@ class View:
         else:
             print("===                           La partie n'est pas commencée.....")
         print("="*90)
-        print("==={:<34}{:>17}".format('', 'Joueurs inscrits'))
+        print("==={:<28}{:<56}===".format('', 'Classement des joueurs'))
         print("-"*90)
         if (not _tournament.player_list == '') & (not len(_tournament.round_list) == 0):
             print("=== {:<6}{:<12}{:<14}{:<12}{:<19}{:<10}".format("Rang",

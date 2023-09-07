@@ -43,7 +43,7 @@ def round_and_match_create(_current_tournament):
 
         # ----------------------------------------------------------
         # If first round, random match player selection,
-        # else by sorted score
+        # else by sorted score in preference, at last next in best score list
         if len(round_player_list) % 2 != 0:
             message = "Impossible de créer les matches, nombre impair de joueurs"
             return message
@@ -119,6 +119,18 @@ def round_and_match_create(_current_tournament):
         if _current_tournament.current_round_number == _current_tournament.round_number:
             message = "Le nombre de round dans la partie est atteint"
             return message
+
+    def create_match_list(_current_tournament=''):
+        """Permit to generate a match list using players registered in tournament
+
+        Args:
+            _current_tournament (str, optional): Tournament class instance as reference. Defaults to ''.
+
+        Returns:
+            List: List of matches created for the round
+        """
+
+        return match_list
 
 
 def round_score_update(_current_tournament):
