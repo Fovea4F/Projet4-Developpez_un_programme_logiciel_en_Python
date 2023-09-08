@@ -9,10 +9,10 @@
 - Télécharger le fichier **Projet4-Developpez_un_programme_logiciel_en_Python-main.zip**
 - Décompresser le zip dans un dossier
 - Depuis le terminal dans le dossier, recomposer l'environnement virtuel à l'aide de la commande: **pip install -r requirements.txt**
-
+- L'environnement virtuel sera activé par la commande **.venv/Projet_4/Scripts/activate**
 2.**Lancement du programme**
 
-Le lancement du programme se fait par la commande :  **python play_tournament.py**
+Depuis l'environnement virtuel, Le lancement du programme se fait par la commande : python **python play_tournament.py**
 
 3.**Rapport Flake8** :
 
